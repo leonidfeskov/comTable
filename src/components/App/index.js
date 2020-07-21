@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import Variants from '../Variants';
+import ComparisonTable from '../ComparisonTable';
 import Summary from '../Summary';
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
             </Typography>
             <Grid container spacing={3}>
                 <Grid item xs={8}>
-                    <Variants />
+                    <ComparisonTable />
                 </Grid>
                 <Grid item xs={4}>
                     <Summary />

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -40,29 +41,31 @@ const rows = [
     createData('Зарплата', 262, 16.0, 24, 6.0),
 ];
 
-export default function Variants() {
+export default function ComparisonTable() {
     const classes = useStyles();
+
+    const comparisonTable = useSelector(({ comparisonTable }) => comparisonTable);
 
     return (
         <TableContainer component={Paper} className={classes.container}>
             <Table aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        <TableCell>Признак для сравнения</TableCell>
-                        <TableCell>React</TableCell>
-                        <TableCell>Angular</TableCell>
-                        <TableCell>Vue</TableCell>
+                        <TableCell />
+                        {Object.keys(comparisonTable.variants).map((variantId) => (
+                            <TableCell key={variantId}>{comparisonTable.variants[variantId]}</TableCell>
+                        ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
-                        <TableRow key={row.name}>
+                    {Object.keys(comparisonTable.properties).map((propertyId) => (
+                        <TableRow key={propertyId}>
                             <TableCell component="th" scope="row">
-                                {row.name}
+                                {comparisonTable.properties[propertyId]}
                             </TableCell>
-                            <TableCell>{row.calories}</TableCell>
-                            <TableCell>{row.fat}</TableCell>
-                            <TableCell>{row.carbs}</TableCell>
+                            {Object.keys(comparisonTable.values[propertyId]).map((variantId) => (
+                                <TableCell key={variantId}>{comparisonTable.values[propertyId][variantId]}</TableCell>
+                            ))}
                         </TableRow>
                     ))}
                 </TableBody>
