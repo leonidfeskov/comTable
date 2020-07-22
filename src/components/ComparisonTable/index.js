@@ -1,5 +1,6 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import ContentEditable from 'react-contenteditable'
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,6 +12,8 @@ import Paper from '@material-ui/core/Paper';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
+
+import { setPropertyValue } from '../../reducers/comparisonTable';
 
 const useStyles = makeStyles({
     container: {
@@ -44,7 +47,13 @@ const rows = [
 export default function ComparisonTable() {
     const classes = useStyles();
 
+    const dispatch = useDispatch();
     const comparisonTable = useSelector(({ comparisonTable }) => comparisonTable);
+    const { variants, properties, values } = comparisonTable;
+
+    const handleChange = ({ target, currentTarget }) => {
+        dispatch(setPropertyValue(currentTarget.dataset.propertyId, currentTarget.dataset.variantId, Number(target.value) || 0))
+    };
 
     return (
         <TableContainer component={Paper} className={classes.container}>
@@ -52,19 +61,26 @@ export default function ComparisonTable() {
                 <TableHead>
                     <TableRow>
                         <TableCell />
-                        {Object.keys(comparisonTable.variants).map((variantId) => (
-                            <TableCell key={variantId}>{comparisonTable.variants[variantId]}</TableCell>
+                        {Object.keys(variants).map((variantId) => (
+                            <TableCell key={variantId}>{variants[variantId].name}</TableCell>
                         ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {Object.keys(comparisonTable.properties).map((propertyId) => (
+                    {Object.keys(properties).map((propertyId) => (
                         <TableRow key={propertyId}>
                             <TableCell component="th" scope="row">
-                                {comparisonTable.properties[propertyId]}
+                                {properties[propertyId].name}
                             </TableCell>
-                            {Object.keys(comparisonTable.values[propertyId]).map((variantId) => (
-                                <TableCell key={variantId}>{comparisonTable.values[propertyId][variantId]}</TableCell>
+                            {Object.keys(values[propertyId]).map((variantId) => (
+                                <TableCell key={variantId}>
+                                    <ContentEditable
+                                        data-property-id={propertyId}
+                                        data-variant-id={variantId}
+                                        html={String(values[propertyId][variantId])}
+                                        onChange={handleChange}
+                                    />
+                                </TableCell>
                             ))}
                         </TableRow>
                     ))}

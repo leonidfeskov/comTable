@@ -1,13 +1,14 @@
-const INITIAL_STATE = {
-    var_1: 0.5,
-    var_2: 0.3,
-    var_3: 0.2,
-}
+const SET_SUMMARY = 'SET_SUMMARY';
 
-const summary = (state = INITIAL_STATE, action) => {
+export const setSummaryAction = (summary) => ({
+    type: SET_SUMMARY,
+    summary,
+});
+
+const summary = (state = {}, action) => {
     switch (action.type) {
-        case 'SET_VISIBILITY_FILTER':
-            return action.filter;
+        case SET_SUMMARY:
+            return action.summary;
         default:
             return state
     }
