@@ -13,7 +13,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { setPropertyValue } from '../../reducers/comparisonTable';
+import { setPropertyValue, addProperty } from '../../reducers/comparisonTable';
 
 const useStyles = makeStyles({
     container: {
@@ -34,16 +34,6 @@ const useStyles = makeStyles({
     }
 });
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-    createData('Количество вакансий', 159, 6.0, 24, 4.0),
-    createData('Количество резюме', 237, 9.0, 37, 4.3),
-    createData('Зарплата', 262, 16.0, 24, 6.0),
-];
-
 export default function ComparisonTable() {
     const classes = useStyles();
 
@@ -52,7 +42,11 @@ export default function ComparisonTable() {
     const { variants, properties, values } = comparisonTable;
 
     const handleChange = ({ target, currentTarget }) => {
-        dispatch(setPropertyValue(currentTarget.dataset.propertyId, currentTarget.dataset.variantId, Number(target.value) || 0))
+        dispatch(setPropertyValue(
+            Number(currentTarget.dataset.propertyIndex),
+            Number(currentTarget.dataset.variantIndex),
+            Number(target.value) || 0)
+        )
     };
 
     return (
@@ -61,33 +55,35 @@ export default function ComparisonTable() {
                 <TableHead>
                     <TableRow>
                         <TableCell />
-                        {Object.keys(variants).map((variantId) => (
-                            <TableCell key={variantId}>{variants[variantId].name}</TableCell>
+                        {variants.map((variant) => (
+                            <TableCell key={variant.id}>{variant.name}</TableCell>
                         ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {Object.keys(properties).map((propertyId) => (
-                        <TableRow key={propertyId}>
+                    {properties.map((property, propertyIndex) => (
+                        <TableRow key={property.id}>
                             <TableCell component="th" scope="row">
-                                {properties[propertyId].name}
+                                {property.name}
                             </TableCell>
-                            {Object.keys(values[propertyId]).map((variantId) => (
-                                <TableCell key={variantId}>
-                                    <ContentEditable
-                                        data-property-id={propertyId}
-                                        data-variant-id={variantId}
-                                        html={String(values[propertyId][variantId])}
-                                        onChange={handleChange}
-                                    />
-                                </TableCell>
-                            ))}
+                            {values[propertyIndex] && values[propertyIndex].map((value, variantIndex) => {
+                                return (
+                                    <TableCell key={variants[variantIndex].id}>
+                                        <ContentEditable
+                                            data-property-index={propertyIndex}
+                                            data-variant-index={variantIndex}
+                                            html={String(value)}
+                                            onChange={handleChange}
+                                        />
+                                    </TableCell>
+                                )
+                            })}
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
             <Tooltip title="Добавить признак" placement="top">
-                <Fab size="small" color="secondary" className={classes.buttonAddRow}>
+                <Fab size="small" color="secondary" className={classes.buttonAddRow} onClick={() => dispatch(addProperty())}>
                     <AddIcon />
                 </Fab>
             </Tooltip>

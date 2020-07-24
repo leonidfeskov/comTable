@@ -5,7 +5,7 @@ export const setSummaryAction = (summary) => ({
     summary,
 });
 
-const summary = (state = {}, action) => {
+const summary = (state = [], action) => {
     switch (action.type) {
         case SET_SUMMARY:
             return action.summary;

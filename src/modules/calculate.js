@@ -1,45 +1,29 @@
 export const calculateSummary = (comparisonData) => {
     const { variants, properties, values } = comparisonData;
 
-    const calculatedVariants = {};
-    const normalizedProperties = {};
-    const normalizedValues = {};
-
     // нормализуем степень важности признаков, по которым сравниваем
-    const propertiesRateSum = Object.keys(properties).reduce((sum, property) => {
-        return sum + properties[property].rate;
+    const propertiesRateSum = properties.reduce((sum, property) => {
+        return sum + property.rate;
     }, 0);
 
-    console.log(propertiesRateSum);
-    Object.keys(properties).forEach((propertyId) => {
-        normalizedProperties[propertyId] = {
-            rate: properties[propertyId].rate / propertiesRateSum,
-        };
-    });
+    const normalizedPropertyRates = properties.map((property) => property.rate / propertiesRateSum);
 
     // нормальзиуем значения
-    Object.keys(values).forEach((propertyId) => {
-        normalizedValues[propertyId] = {};
-
-        const sum = Object.values(values[propertyId]).reduce((sum, value) => {
-            return sum + value;
-        }, 0);
-
-        Object.keys(values[propertyId]).forEach((variantId) => {
-            normalizedValues[propertyId][variantId] = values[propertyId][variantId] / sum;
-        });
+    const normalizedValues = [];
+    values.forEach((row, propertyIndex) => {
+        normalizedValues[propertyIndex] = [];
+        const sum = row.reduce((sum, value) => sum + value, 0);
+        normalizedValues[propertyIndex] = row.map((value) => value / sum);
     });
 
-
-
-    Object.keys(variants).forEach((variantId) => {
-        calculatedVariants[variantId] = {
-            name: variants[variantId].name,
-            value: Object.keys(normalizedProperties).reduce((result, propertyId) => {
-                return result + normalizedProperties[propertyId].rate * normalizedValues[propertyId][variantId]
+    return variants.map((variant, variantIndex) => {
+        return {
+            id: variant.id,
+            name: variant.name,
+            value: normalizedPropertyRates.reduce((result, propertyRate, propertyIndex) => {
+                const value = normalizedValues[propertyIndex] ? normalizedValues[propertyIndex][variantIndex] : 0;
+                return result + propertyRate * value;
             }, 0),
         }
     });
-
-    return calculatedVariants;
 };

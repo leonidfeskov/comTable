@@ -25,18 +25,17 @@ export default function Summary() {
     useEffect(() => {
         const summary = calculateSummary(comparisonTable);
         dispatch(setSummaryAction(summary))
-
     }, [comparisonTable]);
 
     return (
         <Box>
             <List>
-                {Object.keys(summary).map((variantId) => (
-                    <ListItem key={variantId} className={classes.listItem}>
+                {summary.map((variant) => (
+                    <ListItem key={variant.id} className={classes.listItem}>
                         <Typography variant="h5" component="p">
-                            {comparisonTable.variants[variantId].name} ({summary[variantId].value.toFixed(2)})
+                            {variant.name} ({variant.value.toFixed(2)})
                         </Typography>
-                        <Progress value={summary[variantId].value * 100} />
+                        <Progress value={variant.value * 100} />
                     </ListItem>
                 ))}
             </List>
