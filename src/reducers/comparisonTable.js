@@ -1,11 +1,17 @@
 const DEFAULT_RATE = 5;
 const DEFAULT_VALUE = 1;
+const DEFAULT_PROPERTY_NAME = 'Новый признак';
+const DEFAULT_VARIANT_NAME = 'Новый вариант';
 
 const COMPARISON_TABLE_SET_PROPERTY_VALUE = 'COMPARISON_TABLE_SET_PROPERTY_VALUE';
 const COMPARISON_TABLE_SET_PROPERTY_NAME = 'COMPARISON_TABLE_SET_PROPERTY_NAME';
 const COMPARISON_TABLE_SET_VARIANT_NAME = 'COMPARISON_TABLE_SET_VARIANT_NAME';
 const COMPARISON_TABLE_ADD_PROPERTY = 'COMPARISON_TABLE_ADD_PROPERTY';
+const COMPARISON_TABLE_REMOVE_PROPERTY = 'COMPARISON_TABLE_REMOVE_PROPERTY';
 const COMPARISON_TABLE_ADD_VARIANT = 'COMPARISON_TABLE_ADD_VARIANT';
+const COMPARISON_TABLE_REMOVE_VARIANT = 'COMPARISON_TABLE_REMOVE_VARIANT';
+
+const generateId = () => String(new Date().getTime());
 
 export const INITIAL_STATE = {
     variants: [
@@ -69,8 +75,18 @@ export const addProperty = () => ({
     type: COMPARISON_TABLE_ADD_PROPERTY,
 });
 
+export const removeProperty = (propertyId) => ({
+    type: COMPARISON_TABLE_REMOVE_PROPERTY,
+    propertyId,
+});
+
 export const addVariant = () => ({
     type: COMPARISON_TABLE_ADD_VARIANT,
+});
+
+export const removeVariant = (variantId) => ({
+    type: COMPARISON_TABLE_REMOVE_VARIANT,
+    variantId,
 });
 
 const comparisonTable = (state = INITIAL_STATE, action) => {
@@ -122,8 +138,8 @@ const comparisonTable = (state = INITIAL_STATE, action) => {
                 properties: [
                     ...state.properties,
                     {
-                        id: new Date().getTime(),
-                        name: 'Новый признак',
+                        id: generateId(),
+                        name: DEFAULT_PROPERTY_NAME,
                         rate: DEFAULT_RATE,
                     }
                 ],
@@ -132,19 +148,33 @@ const comparisonTable = (state = INITIAL_STATE, action) => {
                     state.variants.map(() => DEFAULT_VALUE),
                 ]
             };
+        case COMPARISON_TABLE_REMOVE_PROPERTY:
+            const propertyIndex = state.properties.findIndex((property) => property.id === action.propertyId);
+            return {
+                ...state,
+                properties: state.properties.filter((property) => property.id !== action.propertyId),
+                values: state.values.filter((row, index) => index !== propertyIndex),
+            };
         case COMPARISON_TABLE_ADD_VARIANT:
             return {
                 ...state,
                 variants: [
                     ...state.variants,
                     {
-                        id: new Date().getTime(),
-                        name: 'Новый вариант',
+                        id: generateId(),
+                        name: DEFAULT_VARIANT_NAME,
                     }
                 ],
                 values: state.values.map((row) => {
                     return [...row, DEFAULT_VALUE]
                 }),
+            };
+        case COMPARISON_TABLE_REMOVE_VARIANT:
+            const variantIndex = state.variants.findIndex((variant) => variant.id === action.variantId);
+            return {
+                ...state,
+                variants: state.variants.filter((variant) => variant.id !== action.variantId),
+                values: state.values.map((row) => row.filter((value, index) => index !== variantIndex)),
             };
         default:
             return state

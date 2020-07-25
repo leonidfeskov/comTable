@@ -13,7 +13,16 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { setPropertyValue, setPropertyName, setVariantName, addProperty, addVariant } from '../../reducers/comparisonTable';
+import ButtonRemove from './ButtonRemove';
+import {
+    setPropertyValue,
+    setPropertyName,
+    setVariantName,
+    addProperty,
+    removeProperty,
+    addVariant,
+    removeVariant,
+} from '../../reducers/comparisonTable';
 
 const useStyles = makeStyles({
     container: {
@@ -32,12 +41,24 @@ const useStyles = makeStyles({
         top: 0,
         transform: 'translate(-50%, -50%)',
     },
+    buttonRemoveProperty: {
+        position: 'absolute',
+        right: '100%',
+        top: '50%',
+        transform: 'translateY(-50%)',
+    },
+    buttonRemoveVariant: {
+        position: 'absolute',
+        bottom: '100%',
+        left: 0,
+    },
     cell: {
+        position: 'relative',
         padding: 0,
     },
     editableCell: {
         padding: 16,
-    }
+    },
 });
 
 export default function ComparisonTable() {
@@ -89,6 +110,9 @@ export default function ComparisonTable() {
                                     onFocus={handleFocusCell}
                                     onBlur={handleBlurVariantName}
                                 />
+                                <div className={classes.buttonRemoveVariant}>
+                                    <ButtonRemove onClick={() => {dispatch(removeVariant(variant.id))}} />
+                                </div>
                             </TableCell>
                         ))}
                     </TableRow>
@@ -105,6 +129,9 @@ export default function ComparisonTable() {
                                     onFocus={handleFocusCell}
                                     onBlur={handleBlurPropertyName}
                                 />
+                                <div className={classes.buttonRemoveProperty}>
+                                    <ButtonRemove onClick={() => {dispatch(removeProperty(property.id))}} />
+                                </div>
                             </TableCell>
                             {values[propertyIndex] && values[propertyIndex].map((value, variantIndex) => {
                                 return (
