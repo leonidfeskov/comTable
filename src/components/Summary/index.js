@@ -25,6 +25,7 @@ export default function Summary() {
     useEffect(() => {
         const summary = calculateSummary(comparisonTable);
         dispatch(setSummaryAction(summary))
+        console.log('CALC')
     }, [comparisonTable]);
 
     return (

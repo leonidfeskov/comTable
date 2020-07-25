@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ContentEditable from 'react-contenteditable'
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,7 +13,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { setPropertyValue, addProperty } from '../../reducers/comparisonTable';
+import { setPropertyValue, setPropertyName, setVariantName, addProperty, addVariant } from '../../reducers/comparisonTable';
 
 const useStyles = makeStyles({
     container: {
@@ -31,6 +31,12 @@ const useStyles = makeStyles({
         left: '100%',
         top: 0,
         transform: 'translate(-50%, -50%)',
+    },
+    cell: {
+        padding: 0,
+    },
+    editableCell: {
+        padding: 16,
     }
 });
 
@@ -41,12 +47,30 @@ export default function ComparisonTable() {
     const comparisonTable = useSelector(({ comparisonTable }) => comparisonTable);
     const { variants, properties, values } = comparisonTable;
 
-    const handleChange = ({ target, currentTarget }) => {
+    const lastPropertyOrVariantName = useRef('');
+
+    const handleChangeValue = ({ target, currentTarget }) => {
         dispatch(setPropertyValue(
             Number(currentTarget.dataset.propertyIndex),
             Number(currentTarget.dataset.variantIndex),
             Number(target.value) || 0)
         )
+    };
+
+    const handleChangePropertyName = ({ target }) => {
+        lastPropertyOrVariantName.current = target.value;
+    };
+
+    const handleFocusCell = ({ target }) => {
+        lastPropertyOrVariantName.current = target.innerText;
+    };
+
+    const handleBlurPropertyName = ({ target }) => {
+        dispatch(setPropertyName(target.dataset.propertyId, lastPropertyOrVariantName.current));
+    };
+
+    const handleBlurVariantName = ({ target }) => {
+        dispatch(setVariantName(target.dataset.variantId, lastPropertyOrVariantName.current));
     };
 
     return (
@@ -56,24 +80,41 @@ export default function ComparisonTable() {
                     <TableRow>
                         <TableCell />
                         {variants.map((variant) => (
-                            <TableCell key={variant.id}>{variant.name}</TableCell>
+                            <TableCell key={variant.id} className={classes.cell}>
+                                <ContentEditable
+                                    className={classes.editableCell}
+                                    data-variant-id={variant.id}
+                                    html={variant.name}
+                                    onChange={handleChangePropertyName}
+                                    onFocus={handleFocusCell}
+                                    onBlur={handleBlurVariantName}
+                                />
+                            </TableCell>
                         ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {properties.map((property, propertyIndex) => (
                         <TableRow key={property.id}>
-                            <TableCell component="th" scope="row">
-                                {property.name}
+                            <TableCell component="th" scope="row" className={classes.cell}>
+                                <ContentEditable
+                                    className={classes.editableCell}
+                                    data-property-id={property.id}
+                                    html={property.name}
+                                    onChange={handleChangePropertyName}
+                                    onFocus={handleFocusCell}
+                                    onBlur={handleBlurPropertyName}
+                                />
                             </TableCell>
                             {values[propertyIndex] && values[propertyIndex].map((value, variantIndex) => {
                                 return (
-                                    <TableCell key={variants[variantIndex].id}>
+                                    <TableCell key={variants[variantIndex].id} className={classes.cell}>
                                         <ContentEditable
+                                            className={classes.editableCell}
                                             data-property-index={propertyIndex}
                                             data-variant-index={variantIndex}
                                             html={String(value)}
-                                            onChange={handleChange}
+                                            onChange={handleChangeValue}
                                         />
                                     </TableCell>
                                 )
@@ -83,12 +124,22 @@ export default function ComparisonTable() {
                 </TableBody>
             </Table>
             <Tooltip title="Добавить признак" placement="top">
-                <Fab size="small" color="secondary" className={classes.buttonAddRow} onClick={() => dispatch(addProperty())}>
+                <Fab
+                    size="small"
+                    color="secondary"
+                    className={classes.buttonAddRow}
+                    onClick={() => dispatch(addProperty())}
+                >
                     <AddIcon />
                 </Fab>
             </Tooltip>
             <Tooltip title="Добавить вариант для сравнения" placement="top">
-                <Fab size="small" color="secondary" className={classes.buttonAddColumn}>
+                <Fab
+                    size="small"
+                    color="secondary"
+                    className={classes.buttonAddColumn}
+                    onClick={() => dispatch(addVariant())}
+                >
                     <AddIcon />
                 </Fab>
             </Tooltip>

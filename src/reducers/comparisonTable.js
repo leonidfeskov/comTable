@@ -2,7 +2,10 @@ const DEFAULT_RATE = 5;
 const DEFAULT_VALUE = 1;
 
 const COMPARISON_TABLE_SET_PROPERTY_VALUE = 'COMPARISON_TABLE_SET_PROPERTY_VALUE';
+const COMPARISON_TABLE_SET_PROPERTY_NAME = 'COMPARISON_TABLE_SET_PROPERTY_NAME';
+const COMPARISON_TABLE_SET_VARIANT_NAME = 'COMPARISON_TABLE_SET_VARIANT_NAME';
 const COMPARISON_TABLE_ADD_PROPERTY = 'COMPARISON_TABLE_ADD_PROPERTY';
+const COMPARISON_TABLE_ADD_VARIANT = 'COMPARISON_TABLE_ADD_VARIANT';
 
 export const INITIAL_STATE = {
     variants: [
@@ -50,8 +53,24 @@ export const setPropertyValue = (propertyIndex, variantIndex, value) => ({
     value,
 });
 
+export const setPropertyName = (propertyId, name) => ({
+    type: COMPARISON_TABLE_SET_PROPERTY_NAME,
+    propertyId,
+    name,
+});
+
+export const setVariantName = (variantId, name) => ({
+    type: COMPARISON_TABLE_SET_VARIANT_NAME,
+    variantId,
+    name,
+});
+
 export const addProperty = () => ({
     type: COMPARISON_TABLE_ADD_PROPERTY,
+});
+
+export const addVariant = () => ({
+    type: COMPARISON_TABLE_ADD_VARIANT,
 });
 
 const comparisonTable = (state = INITIAL_STATE, action) => {
@@ -71,6 +90,32 @@ const comparisonTable = (state = INITIAL_STATE, action) => {
                     return row;
                 }),
             };
+        case COMPARISON_TABLE_SET_PROPERTY_NAME:
+            return {
+                ...state,
+                properties: state.properties.map((property) => {
+                    if (property.id ===action.propertyId) {
+                        return {
+                            ...property,
+                            name: action.name,
+                        }
+                    }
+                    return property;
+                })
+            };
+        case COMPARISON_TABLE_SET_VARIANT_NAME:
+            return {
+                ...state,
+                variants: state.variants.map((variant) => {
+                    if (variant.id ===action.variantId) {
+                        return {
+                            ...variant,
+                            name: action.name,
+                        }
+                    }
+                    return variant;
+                })
+            };
         case COMPARISON_TABLE_ADD_PROPERTY:
             return {
                 ...state,
@@ -86,6 +131,20 @@ const comparisonTable = (state = INITIAL_STATE, action) => {
                     ...state.values,
                     state.variants.map(() => DEFAULT_VALUE),
                 ]
+            };
+        case COMPARISON_TABLE_ADD_VARIANT:
+            return {
+                ...state,
+                variants: [
+                    ...state.variants,
+                    {
+                        id: new Date().getTime(),
+                        name: 'Новый вариант',
+                    }
+                ],
+                values: state.values.map((row) => {
+                    return [...row, DEFAULT_VALUE]
+                }),
             };
         default:
             return state
