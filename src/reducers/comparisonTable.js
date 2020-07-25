@@ -5,6 +5,7 @@ const DEFAULT_VARIANT_NAME = 'Новый вариант';
 
 const COMPARISON_TABLE_SET_PROPERTY_VALUE = 'COMPARISON_TABLE_SET_PROPERTY_VALUE';
 const COMPARISON_TABLE_SET_PROPERTY_NAME = 'COMPARISON_TABLE_SET_PROPERTY_NAME';
+const COMPARISON_TABLE_SET_PROPERTY_RATE = 'COMPARISON_TABLE_SET_PROPERTY_RATE';
 const COMPARISON_TABLE_SET_VARIANT_NAME = 'COMPARISON_TABLE_SET_VARIANT_NAME';
 const COMPARISON_TABLE_ADD_PROPERTY = 'COMPARISON_TABLE_ADD_PROPERTY';
 const COMPARISON_TABLE_REMOVE_PROPERTY = 'COMPARISON_TABLE_REMOVE_PROPERTY';
@@ -42,7 +43,7 @@ export const INITIAL_STATE = {
         {
             id: '3',
             name: 'Зарплата',
-            rate: DEFAULT_RATE,
+            rate: DEFAULT_RATE + 2,
         },
     ],
     values: [
@@ -63,6 +64,12 @@ export const setPropertyName = (propertyId, name) => ({
     type: COMPARISON_TABLE_SET_PROPERTY_NAME,
     propertyId,
     name,
+});
+
+export const setPropertyRate = (propertyId, rate) => ({
+    type: COMPARISON_TABLE_SET_PROPERTY_RATE,
+    propertyId,
+    rate,
 });
 
 export const setVariantName = (variantId, name) => ({
@@ -114,6 +121,19 @@ const comparisonTable = (state = INITIAL_STATE, action) => {
                         return {
                             ...property,
                             name: action.name,
+                        }
+                    }
+                    return property;
+                })
+            };
+        case COMPARISON_TABLE_SET_PROPERTY_RATE:
+            return {
+                ...state,
+                properties: state.properties.map((property) => {
+                    if (property.id ===action.propertyId) {
+                        return {
+                            ...property,
+                            rate: action.rate,
                         }
                     }
                     return property;

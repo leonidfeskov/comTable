@@ -13,6 +13,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 
+import PropertyRate from './PropertyRate';
 import ButtonRemove from './ButtonRemove';
 import {
     setPropertyValue,
@@ -22,6 +23,7 @@ import {
     removeProperty,
     addVariant,
     removeVariant,
+    setPropertyRate,
 } from '../../reducers/comparisonTable';
 
 const useStyles = makeStyles({
@@ -94,6 +96,13 @@ export default function ComparisonTable() {
         dispatch(setVariantName(target.dataset.variantId, lastPropertyOrVariantName.current));
     };
 
+    const handleChangePropertyRate = (propertyId, rate) => {
+        const property = properties.find((property) => property.id === propertyId);
+        if (property.rate !== rate) {
+            dispatch(setPropertyRate(propertyId, rate))
+        }
+    };
+
     return (
         <TableContainer component={Paper} className={classes.container}>
             <Table aria-label="simple table">
@@ -128,6 +137,10 @@ export default function ComparisonTable() {
                                     onChange={handleChangePropertyName}
                                     onFocus={handleFocusCell}
                                     onBlur={handleBlurPropertyName}
+                                />
+                                <PropertyRate
+                                    value={property.rate}
+                                    onChange={(event, value) => handleChangePropertyRate(property.id, value)}
                                 />
                                 <div className={classes.buttonRemoveProperty}>
                                     <ButtonRemove onClick={() => {dispatch(removeProperty(property.id))}} />
