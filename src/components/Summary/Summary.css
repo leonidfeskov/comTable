@@ -1,0 +1,11 @@
+.summary-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    line-height: 2rem;
+}
+
+.summary-text_best {
+    font-size: 1.25rem;
+    font-weight: bold;
+}

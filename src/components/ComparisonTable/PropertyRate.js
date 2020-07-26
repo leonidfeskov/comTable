@@ -1,26 +1,30 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
 
-const useStyles = makeStyles(() => ({
+const PropertySlider = withStyles({
     root: {
         position: 'absolute',
         zIndex: 1,
         left: 0,
         right: 0,
-        bottom: -1,
+        bottom: -2,
         padding: 0,
     },
-}));
+    // colorPrimary: {
+    //     color: '#ff5722',
+    // },
+    rail: {
+        backgroundColor: 'transparent',
+    }
+})(Slider);
 
 export default function PropertyRate({ value, onChange }) {
-    const classes = useStyles();
-
     return (
-        <Slider
-            className={classes.root}
+        <PropertySlider
             value={value}
             onChange={onChange}
+            color="secondary"
             aria-labelledby="discrete-slider"
             valueLabelDisplay="auto"
             step={1}

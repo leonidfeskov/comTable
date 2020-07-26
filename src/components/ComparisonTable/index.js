@@ -1,19 +1,10 @@
 import React, { useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import classnames from 'classnames';
 import ContentEditable from 'react-contenteditable'
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import Tooltip from '@material-ui/core/Tooltip';
 
 import PropertyRate from './PropertyRate';
+import ButtonAdd from './ButtonAdd';
 import ButtonRemove from './ButtonRemove';
 import {
     setPropertyValue,
@@ -26,46 +17,9 @@ import {
     setPropertyRate,
 } from '../../reducers/comparisonTable';
 
-const useStyles = makeStyles({
-    container: {
-        position: 'relative',
-        overflow: 'visible',
-    },
-    buttonAddRow: {
-        position: 'absolute',
-        left: 0,
-        top: '100%',
-        transform: 'translate(-50%, -50%)',
-    },
-    buttonAddColumn: {
-        position: 'absolute',
-        left: '100%',
-        top: 0,
-        transform: 'translate(-50%, -50%)',
-    },
-    buttonRemoveProperty: {
-        position: 'absolute',
-        right: '100%',
-        top: '50%',
-        transform: 'translateY(-50%)',
-    },
-    buttonRemoveVariant: {
-        position: 'absolute',
-        bottom: '100%',
-        left: 0,
-    },
-    cell: {
-        position: 'relative',
-        padding: 0,
-    },
-    editableCell: {
-        padding: 16,
-    },
-});
+import './ComparisonTable.css';
 
 export default function ComparisonTable() {
-    const classes = useStyles();
-
     const dispatch = useDispatch();
     const comparisonTable = useSelector(({ comparisonTable }) => comparisonTable);
     const { variants, properties, values } = comparisonTable;
@@ -108,34 +62,39 @@ export default function ComparisonTable() {
     };
 
     return (
-        <TableContainer component={Paper} className={classes.container}>
-            <Table aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell />
+        <div className="comparison-table-container">
+            <table className="comparison-table">
+                <thead>
+                    <tr>
+                        <th className="comparison-table__cell comparison-table__cell_head" />
                         {variants.map((variant) => (
-                            <TableCell key={variant.id} className={classes.cell}>
+                            <th className="comparison-table__cell comparison-table__cell_head" key={variant.id}>
                                 <ContentEditable
-                                    className={classes.editableCell}
+                                    className="comparison-table__cell-editable"
                                     data-variant-id={variant.id}
                                     html={variant.name}
                                     onChange={handleChangePropertyName}
                                     onFocus={handleFocusCell}
                                     onBlur={handleBlurVariantName}
                                 />
-                                <div className={classes.buttonRemoveVariant}>
+                                <div className="comparison-table-remove-variant">
                                     <ButtonRemove onClick={() => {dispatch(removeVariant(variant.id))}} />
                                 </div>
-                            </TableCell>
+                            </th>
                         ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
+                    </tr>
+                </thead>
+                <tbody>
                     {properties.map((property, propertyIndex) => (
-                        <TableRow key={property.id}>
-                            <TableCell component="th" scope="row" className={classes.cell}>
+                        <tr
+                            className={classnames('comparison-table__row', {
+                                'comparison-table__row_disabled': !property.rate,
+                            })}
+                            key={property.id}
+                        >
+                            <th className="comparison-table__cell comparison-table__cell_property">
                                 <ContentEditable
-                                    className={classes.editableCell}
+                                    className="comparison-table__cell-editable"
                                     data-property-id={property.id}
                                     html={property.name}
                                     onChange={handleChangePropertyName}
@@ -146,47 +105,33 @@ export default function ComparisonTable() {
                                     value={property.rate}
                                     onChange={(event, value) => handleChangePropertyRate(property.id, value)}
                                 />
-                                <div className={classes.buttonRemoveProperty}>
+                                <div className="comparison-table-remove-property">
                                     <ButtonRemove onClick={() => {dispatch(removeProperty(property.id))}} />
                                 </div>
-                            </TableCell>
+                            </th>
                             {values[propertyIndex] && values[propertyIndex].map((value, variantIndex) => {
                                 return (
-                                    <TableCell key={variants[variantIndex].id} className={classes.cell}>
+                                    <td className="comparison-table__cell" key={variants[variantIndex].id}>
                                         <ContentEditable
-                                            className={classes.editableCell}
+                                            className="comparison-table__cell-editable"
                                             data-property-index={propertyIndex}
                                             data-variant-index={variantIndex}
                                             html={String(value)}
                                             onChange={handleChangeValue}
                                         />
-                                    </TableCell>
+                                    </td>
                                 )
                             })}
-                        </TableRow>
+                        </tr>
                     ))}
-                </TableBody>
-            </Table>
-            <Tooltip title="Добавить признак" placement="top">
-                <Fab
-                    size="small"
-                    color="secondary"
-                    className={classes.buttonAddRow}
-                    onClick={() => dispatch(addProperty())}
-                >
-                    <AddIcon />
-                </Fab>
-            </Tooltip>
-            <Tooltip title="Добавить вариант для сравнения" placement="top">
-                <Fab
-                    size="small"
-                    color="secondary"
-                    className={classes.buttonAddColumn}
-                    onClick={() => dispatch(addVariant())}
-                >
-                    <AddIcon />
-                </Fab>
-            </Tooltip>
-        </TableContainer>
+                </tbody>
+            </table>
+            <div className="comparison-table-add-row">
+                <ButtonAdd tooltip="Добавить признак" onClick={() => dispatch(addProperty())} />
+            </div>
+            <div className="comparison-table-add-column">
+                <ButtonAdd tooltip="Добавить вариант" onClick={() => dispatch(addVariant())} />
+            </div>
+        </div>
     );
 }

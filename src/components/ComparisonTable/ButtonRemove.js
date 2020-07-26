@@ -5,7 +5,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 export default function ButtonRemove({ onClick }) {
     return (
         <IconButton aria-label="delete" onClick={onClick}>
-            <DeleteIcon fontSize="small" />
+            <DeleteIcon fontSize="small" color="action" />
         </IconButton>
     );
 }
