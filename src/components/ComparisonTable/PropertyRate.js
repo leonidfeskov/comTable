@@ -5,6 +5,7 @@ import Slider from '@material-ui/core/Slider';
 const useStyles = makeStyles(() => ({
     root: {
         position: 'absolute',
+        zIndex: 1,
         left: 0,
         right: 0,
         bottom: -1,
@@ -23,7 +24,6 @@ export default function PropertyRate({ value, onChange }) {
             aria-labelledby="discrete-slider"
             valueLabelDisplay="auto"
             step={1}
-            marks
             min={0}
             max={10}
         />

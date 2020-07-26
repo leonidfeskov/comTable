@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ContentEditable from 'react-contenteditable'
 import { makeStyles } from '@material-ui/core/styles';
@@ -69,6 +69,10 @@ export default function ComparisonTable() {
     const dispatch = useDispatch();
     const comparisonTable = useSelector(({ comparisonTable }) => comparisonTable);
     const { variants, properties, values } = comparisonTable;
+
+    useEffect(() => {
+        localStorage.setItem('comparisonTable', JSON.stringify(comparisonTable));
+    }, [comparisonTable]);
 
     const lastPropertyOrVariantName = useRef('');
 

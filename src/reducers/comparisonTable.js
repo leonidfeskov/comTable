@@ -43,7 +43,7 @@ export const INITIAL_STATE = {
         {
             id: '3',
             name: 'Зарплата',
-            rate: DEFAULT_RATE + 2,
+            rate: DEFAULT_RATE,
         },
     ],
     values: [
@@ -96,7 +96,16 @@ export const removeVariant = (variantId) => ({
     variantId,
 });
 
-const comparisonTable = (state = INITIAL_STATE, action) => {
+let stateFromStorage;
+if (localStorage.getItem('comparisonTable')) {
+    try {
+        stateFromStorage = JSON.parse(localStorage.getItem('comparisonTable'))
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const comparisonTable = (state = stateFromStorage || INITIAL_STATE, action) => {
     switch (action.type) {
         case COMPARISON_TABLE_SET_PROPERTY_VALUE:
             return {
