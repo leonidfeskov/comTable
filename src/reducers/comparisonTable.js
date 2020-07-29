@@ -3,6 +3,7 @@ const DEFAULT_VALUE = 1;
 const DEFAULT_PROPERTY_NAME = 'Новый признак';
 const DEFAULT_VARIANT_NAME = 'Новый вариант';
 
+const COMPARISON_TABLE_SET_ALL = 'COMPARISON_TABLE_SET_ALL';
 const COMPARISON_TABLE_SET_PROPERTY_VALUE = 'COMPARISON_TABLE_SET_PROPERTY_VALUE';
 const COMPARISON_TABLE_SET_PROPERTY_NAME = 'COMPARISON_TABLE_SET_PROPERTY_NAME';
 const COMPARISON_TABLE_SET_PROPERTY_RATE = 'COMPARISON_TABLE_SET_PROPERTY_RATE';
@@ -52,6 +53,11 @@ export const INITIAL_STATE = {
         [100000, 90000, 120000],
     ],
 };
+
+export const setComparisonTable = (payload) => ({
+    type: COMPARISON_TABLE_SET_ALL,
+    payload,
+});
 
 export const setPropertyValue = (propertyIndex, variantIndex, value) => ({
     type: COMPARISON_TABLE_SET_PROPERTY_VALUE,
@@ -107,6 +113,8 @@ if (localStorage.getItem('comparisonTable')) {
 
 const comparisonTable = (state = stateFromStorage || INITIAL_STATE, action) => {
     switch (action.type) {
+        case COMPARISON_TABLE_SET_ALL:
+            return action.payload;
         case COMPARISON_TABLE_SET_PROPERTY_VALUE:
             return {
                 ...state,

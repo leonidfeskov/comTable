@@ -6,6 +6,7 @@ import ContentEditable from 'react-contenteditable'
 import PropertyRate from './PropertyRate';
 import ButtonAdd from './ButtonAdd';
 import ButtonRemove from './ButtonRemove';
+import ButtonSave from './ButtonSave';
 import {
     setPropertyValue,
     setPropertyName,
@@ -15,7 +16,10 @@ import {
     addVariant,
     removeVariant,
     setPropertyRate,
+    setComparisonTable
 } from '../../reducers/comparisonTable';
+import { setLoading } from '../../reducers/loading';
+import firebaseAPI from '../../modules/firebase';
 
 import './ComparisonTable.css';
 
@@ -24,8 +28,32 @@ export default function ComparisonTable() {
     const comparisonTable = useSelector(({ comparisonTable }) => comparisonTable);
     const { variants, properties, values } = comparisonTable;
 
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const tableId = urlParams.get('id');
+
     useEffect(() => {
-        localStorage.setItem('comparisonTable', JSON.stringify(comparisonTable));
+        if (tableId) {
+            firebaseAPI.get(
+                `comparisonTable/${tableId}`,
+                (response) => {
+                    dispatch(setComparisonTable(response));
+                    dispatch(setLoading(false));
+                },
+                (error) => {
+                    console.error(error);
+                    dispatch(setLoading(false));
+                }
+            );
+        } else {
+            dispatch(setLoading(false));
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!tableId) {
+            localStorage.setItem('comparisonTable', JSON.stringify(comparisonTable));
+        }
     }, [comparisonTable]);
 
     const lastPropertyOrVariantName = useRef('');
@@ -131,6 +159,9 @@ export default function ComparisonTable() {
             </div>
             <div className="comparison-table-add-column">
                 <ButtonAdd tooltip="Добавить вариант" onClick={() => dispatch(addVariant())} />
+            </div>
+            <div className="comparison-table-save">
+                <ButtonSave />
             </div>
         </div>
     );
