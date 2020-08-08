@@ -19,9 +19,16 @@ import {
     setComparisonTable
 } from '../../reducers/comparisonTable';
 import { setLoading } from '../../reducers/loading';
-import firebaseAPI from '../../modules/firebase';
+// import firebaseAPI from '../../modules/firebase';
 
 import './ComparisonTable.css';
+
+const selectText = (element) => {
+    const range = document.createRange();
+    range.selectNode(element);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+}
 
 export default function ComparisonTable() {
     const dispatch = useDispatch();
@@ -34,17 +41,17 @@ export default function ComparisonTable() {
 
     useEffect(() => {
         if (tableId) {
-            firebaseAPI.get(
-                `comparisonTable/${tableId}`,
-                (response) => {
-                    dispatch(setComparisonTable(response));
-                    dispatch(setLoading(false));
-                },
-                (error) => {
-                    console.error(error);
-                    dispatch(setLoading(false));
-                }
-            );
+            // firebaseAPI.get(
+            //     `comparisonTable/${tableId}`,
+            //     (response) => {
+            //         dispatch(setComparisonTable(response));
+            //         dispatch(setLoading(false));
+            //     },
+            //     (error) => {
+            //         console.error(error);
+            //         dispatch(setLoading(false));
+            //     }
+            // );
         } else {
             dispatch(setLoading(false));
         }
@@ -71,6 +78,7 @@ export default function ComparisonTable() {
     };
 
     const handleFocusCell = ({ target }) => {
+        selectText(target);
         lastPropertyOrVariantName.current = target.innerText;
     };
 
@@ -146,6 +154,7 @@ export default function ComparisonTable() {
                                             data-variant-index={variantIndex}
                                             html={String(value)}
                                             onChange={handleChangeValue}
+                                            onFocus={handleFocusCell}
                                         />
                                     </td>
                                 )
