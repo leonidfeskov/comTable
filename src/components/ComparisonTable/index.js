@@ -25,10 +25,13 @@ import './ComparisonTable.css';
 
 const selectText = (element) => {
     const range = document.createRange();
-    range.selectNode(element);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-}
+    const textNode = element.childNodes[0];
+    if (textNode) {
+        range.selectNode(textNode);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+    }
+};
 
 export default function ComparisonTable() {
     const dispatch = useDispatch();
@@ -102,7 +105,11 @@ export default function ComparisonTable() {
             <table className="comparison-table">
                 <thead>
                     <tr>
-                        <th className="comparison-table__cell comparison-table__cell_head" />
+                        <th className="comparison-table__cell comparison-table__cell_head">
+                            <div className="comparison-table-save">
+                                <ButtonSave />
+                            </div>
+                        </th>
                         {variants.map((variant) => (
                             <th className="comparison-table__cell comparison-table__cell_head" key={variant.id}>
                                 <ContentEditable
@@ -168,9 +175,6 @@ export default function ComparisonTable() {
             </div>
             <div className="comparison-table-add-column">
                 <ButtonAdd tooltip="Добавить вариант" onClick={() => dispatch(addVariant())} />
-            </div>
-            <div className="comparison-table-save">
-                <ButtonSave />
             </div>
         </div>
     );
