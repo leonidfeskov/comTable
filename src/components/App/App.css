@@ -1,0 +1,9 @@
+.container {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    margin-bottom: 40px;
+}

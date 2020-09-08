@@ -43,9 +43,9 @@ export default function Summary() {
     }, [comparisonTable]);
 
     return (
-        <List className={classes.root}>
+        <div className="summary-list">
             {summary.map((variant) => (
-                <ListItem key={variant.id} className={classes.listItem}>
+                <div key={variant.id} className="summary-list-item">
                     <div className={classnames('summary-text', {
                         'summary-text_best': variant.value === bestValue,
                     })}>
@@ -61,8 +61,8 @@ export default function Summary() {
                         isWorst={variant.value === worstValue}
                         isBest={variant.value === bestValue}
                     />
-                </ListItem>
+                </div>
             ))}
-        </List>
+        </div>
     );
 }

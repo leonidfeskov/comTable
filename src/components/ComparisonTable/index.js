@@ -4,8 +4,7 @@ import classnames from 'classnames';
 import ContentEditable from 'react-contenteditable'
 
 import PropertyRate from './PropertyRate';
-import ButtonAdd from './ButtonAdd';
-import ButtonRemove from './ButtonRemove';
+import ButtonIcon from '../ButtonIcon';
 import ButtonSave from './ButtonSave';
 import {
     setPropertyValue,
@@ -100,61 +99,73 @@ export default function ComparisonTable() {
         }
     };
 
+    const removeVariantHandler = (variantId) => {
+        const isConfirmed = window.confirm('Действительно хотите удалить вариант?');
+        if (isConfirmed) {
+            dispatch(removeVariant(variantId));
+        }
+
+    };
+
+    const removePropertyHandler = (propertyId) => {
+        const isConfirmed = window.confirm('Действительно хотите удалить признак?');
+        if (isConfirmed) {
+            dispatch(removeProperty(propertyId));
+        }
+    };
+
     return (
         <div className="comparison-table-container">
-            <table className="comparison-table">
-                <thead>
-                    <tr>
-                        <th className="comparison-table__cell comparison-table__cell_head">
-                            <div className="comparison-table-save">
-                                <ButtonSave />
+            <div className="comparison-table">
+                <div className="comparison-table__row comparison-table__row_head">
+                    <div className="comparison-table__cell comparison-table__cell_spacer">
+                        {/*<div className="comparison-table-save">*/}
+                        {/*    <ButtonSave />*/}
+                        {/*</div>*/}
+                    </div>
+                    <div className="comparison-table__value">
+                    {variants.map((variant) => (
+                        <div className="comparison-table__cell comparison-table__cell_head" key={variant.id}>
+                            <ContentEditable
+                                className="comparison-table__cell-editable"
+                                data-variant-id={variant.id}
+                                html={variant.name}
+                                onChange={handleChangePropertyName}
+                                onFocus={handleFocusCell}
+                                onBlur={handleBlurVariantName}
+                            />
+                            <div className="comparison-table-remove-variant">
+                                <ButtonIcon kind="remove" onClick={() => removeVariantHandler(variant.id)} />
                             </div>
-                        </th>
-                        {variants.map((variant) => (
-                            <th className="comparison-table__cell comparison-table__cell_head" key={variant.id}>
-                                <ContentEditable
-                                    className="comparison-table__cell-editable"
-                                    data-variant-id={variant.id}
-                                    html={variant.name}
-                                    onChange={handleChangePropertyName}
-                                    onFocus={handleFocusCell}
-                                    onBlur={handleBlurVariantName}
-                                />
-                                <div className="comparison-table-remove-variant">
-                                    <ButtonRemove onClick={() => {dispatch(removeVariant(variant.id))}} />
-                                </div>
-                            </th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {properties.map((property, propertyIndex) => (
-                        <tr
-                            className={classnames('comparison-table__row', {
-                                'comparison-table__row_disabled': !property.rate,
-                            })}
-                            key={property.id}
-                        >
-                            <th className="comparison-table__cell comparison-table__cell_property">
-                                <ContentEditable
-                                    className="comparison-table__cell-editable"
-                                    data-property-id={property.id}
-                                    html={property.name}
-                                    onChange={handleChangePropertyName}
-                                    onFocus={handleFocusCell}
-                                    onBlur={handleBlurPropertyName}
-                                />
-                                <PropertyRate
-                                    value={property.rate}
-                                    onChange={(event, value) => handleChangePropertyRate(property.id, value)}
-                                />
-                                <div className="comparison-table-remove-property">
-                                    <ButtonRemove onClick={() => {dispatch(removeProperty(property.id))}} />
-                                </div>
-                            </th>
+                        </div>
+                    ))}
+                    </div>
+                </div>
+                {properties.map((property, propertyIndex) => (
+                    <div
+                        className={classnames('comparison-table__row', {
+                            'comparison-table__row_disabled': !property.rate,
+                        })}
+                        key={property.id}
+                    >
+                        <div className="comparison-table__cell comparison-table__cell_property">
+                            <ContentEditable
+                                className="comparison-table__cell-editable"
+                                data-property-id={property.id}
+                                html={property.name}
+                                onChange={handleChangePropertyName}
+                                onFocus={handleFocusCell}
+                                onBlur={handleBlurPropertyName}
+                            />
+                            <PropertyRate
+                                value={property.rate}
+                                onChange={(event, value) => handleChangePropertyRate(property.id, value)}
+                            />
+                        </div>
+                        <div className="comparison-table__value">
                             {values[propertyIndex] && values[propertyIndex].map((value, variantIndex) => {
                                 return (
-                                    <td className="comparison-table__cell" key={variants[variantIndex].id}>
+                                    <div className="comparison-table__cell" key={variants[variantIndex].id}>
                                         <ContentEditable
                                             className="comparison-table__cell-editable"
                                             data-property-index={propertyIndex}
@@ -163,18 +174,25 @@ export default function ComparisonTable() {
                                             onChange={handleChangeValue}
                                             onFocus={handleFocusCell}
                                         />
-                                    </td>
+                                    </div>
                                 )
                             })}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <div className="comparison-table-add-row">
-                <ButtonAdd tooltip="Добавить признак" onClick={() => dispatch(addProperty())} />
+                        </div>
+                        <div className="comparison-table-remove-property">
+                            <ButtonIcon kind="remove" onClick={() => removePropertyHandler(property.id)} />
+                        </div>
+                    </div>
+                ))}
             </div>
-            <div className="comparison-table-add-column">
-                <ButtonAdd tooltip="Добавить вариант" onClick={() => dispatch(addVariant())} />
+            <div className="comparison-table-actions">
+                <div className="comparison-table-actions__add-row">
+                    <ButtonIcon kind="add-row" size="large" onClick={() => dispatch(addProperty())} />
+                </div>
+                {variants.length < 4 && (
+                    <div className="comparison-table-actions__add-column">
+                        <ButtonIcon kind="add-column" size="large" onClick={() => dispatch(addVariant())} />
+                    </div>
+                )}
             </div>
         </div>
     );

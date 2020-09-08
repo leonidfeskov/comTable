@@ -1,3 +1,7 @@
+.summary-list-item {
+    margin-bottom: 20px;
+}
+
 .summary-text {
     display: flex;
     justify-content: space-between;

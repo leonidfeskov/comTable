@@ -1,15 +1,17 @@
 .progress {
-    background-color: #cfd8dc;
+    background-color: #ccc;
     height: 20px;
-    border-radius: 10px;
-    box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12);
+    padding: 4px;
+    border: 4px solid #333;
+    box-shadow: inset 4px 4px 0 rgba(0, 0, 0, 0.3);
 }
 
 .progress__bar {
     background-color: #ffc107;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
     height: 100%;
-    border-radius: 10px;
     width: 0;
+    min-width: 20px;
     transition: all 0.3s ease 0s;
 }
 
