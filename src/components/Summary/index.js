@@ -2,14 +2,12 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import classnames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 
 import Progress from '../Progress';
 import { setSummaryAction } from '../../reducers/summary';
 import { calculateSummary } from '../../modules/calculate';
 
-import './Summary.css';
+import './Summary.scss';
 
 const useStyles = makeStyles(() => ({
     root: {

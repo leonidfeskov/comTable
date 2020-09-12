@@ -1,0 +1,27 @@
+$backgroundColor: #455a64;
+$backgroundColorDarken: rgba(0, 0, 0, 0.1);
+
+$fontColor: #fff;
+$fontColorDimmed: rgba(255, 255, 255, 0.5);
+$buttonColorHover: rgba(0, 0, 0, 0.3);
+
+$colorGray: #ccc;
+$colorGood: #4caf50;
+$colorNormal: #ffc107;
+$colorBad: #ff5722;
+
+$iconSize: 16px;
+
+$transitionDuration: 0.3s;
+
+$breakpointSM: 600px;
+$breakpointMD: 960px;
+$breakpointLG: 1280px;
+$breakpointXL: 1920px;
+
+$screenGtXS: (min-width: $breakpointSM);
+$screenGtSM: (min-width: $breakpointMD);
+$screenGtMD: (min-width: $breakpointLG);
+$screenGtLG: (min-width: $breakpointXL);
+
+

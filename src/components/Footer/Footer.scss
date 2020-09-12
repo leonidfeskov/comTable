@@ -1,0 +1,9 @@
+@import '../../styles/_variables';
+
+.footer {
+    background: $backgroundColorDarken;
+    color: $fontColorDimmed;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: auto;
+}

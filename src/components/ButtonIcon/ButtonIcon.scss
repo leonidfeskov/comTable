@@ -1,0 +1,38 @@
+@import '../../styles/_variables';
+
+.button-icon {
+    background: transparent no-repeat 0 0;
+    background-size: 100% 100%;
+    box-sizing: border-box;
+    border: 0;
+    padding: 0;
+    width: $iconSize;
+    height: $iconSize;
+    text-indent: -9999px;
+    cursor: pointer;
+    outline: none;
+    transition: background-color $transitionDuration ease 0s;
+
+    &:hover, &:focus {
+        background-color: $buttonColorHover;
+    }
+
+    &_large {
+        width: $iconSize * 2;
+        height: $iconSize * 2;
+    }
+
+    &_remove {
+        background-image: url('images/icon-remove.png');
+    }
+
+    &_add-row {
+        background-image: url('images/icon-add-row.png')
+    }
+
+    &_add-column {
+        background-image: url('images/icon-add-column.png')
+    }
+}
+
+

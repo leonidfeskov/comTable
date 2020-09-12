@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import './ButtonIcon.css';
+import './ButtonIcon.scss';
 
 export default function ButtonIcon({ kind, text, size, onClick }) {
     return (

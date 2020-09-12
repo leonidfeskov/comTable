@@ -9,7 +9,7 @@ import ComparisonTable from '../ComparisonTable';
 import Summary from '../Summary';
 import Loading from '../Loading';
 
-import './App.css';
+import './App.scss';
 
 function App() {
     const loading = useSelector(({ loading }) => loading);

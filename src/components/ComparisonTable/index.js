@@ -20,7 +20,7 @@ import {
 import { setLoading } from '../../reducers/loading';
 // import firebaseAPI from '../../modules/firebase';
 
-import './ComparisonTable.css';
+import './ComparisonTable.scss';
 
 const selectText = (element) => {
     const range = document.createRange();

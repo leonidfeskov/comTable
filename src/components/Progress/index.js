@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import './Progress.css';
+import './Progress.scss';
 
 export default function Progress({ value, isWorst, isBest }) {
     return (

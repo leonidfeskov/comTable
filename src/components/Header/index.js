@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
 
-import './Header.css';
+import './Header.scss';
 
 export default function Header() {
     return (

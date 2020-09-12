@@ -1,11 +1,13 @@
+@import '../../styles/_variables';
+
 .header {
-    background: rgba(0,0,0, 0.1);
+    background: $backgroundColorDarken;
     padding: 20px;
     margin-bottom: 40px;
 }
 
 .header-logo {
-    background: url('comtable.png') no-repeat 0 0;
+    background: url('images/comtable.png') no-repeat 0 0;
     background-size: 100% 100%;
     width: 128px;
     height: 64px;

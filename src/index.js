@@ -8,7 +8,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import App from './components/App';
 import rootReducer from './reducers';
 
-import './index.css';
+import './styles/main.scss';
 
 const store = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 

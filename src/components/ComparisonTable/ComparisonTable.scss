@@ -1,0 +1,124 @@
+@import '../../styles/_variables';
+
+$cellActionWidth: 30px;
+$cellPropertyWidth: 250px;
+
+
+.comparison-table-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.comparison-table {
+    &__row {
+        position: relative;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+        border-top: 2px solid rgba(255, 255, 255, 0.2);
+        padding-right: $cellActionWidth;
+
+        @media #{$screenGtXS} {
+            display: flex;
+            padding-right: 0;
+        }
+
+        &:nth-child(2n) {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        &_head {
+            background-color: rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+
+        &_disabled {
+            color: rgba(255, 255, 255, 0.4);
+        }
+    }
+
+    &__value {
+        display: flex;
+
+        @media #{$screenGtXS} {
+            flex-grow: 1;
+        }
+    }
+
+    &__cell {
+        text-align: right;
+        position: relative;
+        box-sizing: border-box;
+        padding: 0;
+        min-height: 42px;
+        width: 100%;
+
+        &_spacer {
+            display: none;
+            width: $cellPropertyWidth;
+
+            @media #{$screenGtXS} {
+                display: block;
+            }
+        }
+
+        &_property {
+            text-align: center;
+            width: 100%;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+
+            @media #{$screenGtXS} {
+                width: $cellPropertyWidth;
+                text-align: left;
+                border-bottom: 0;
+            }
+        }
+    }
+
+    &__cell-editable {
+        padding: 8px 16px;
+        border: 2px solid transparent;
+
+        @media #{$screenGtSM} {
+            padding-top: 16px;
+            padding-bottom: 16px;
+        }
+
+        &:focus {
+            outline: none;
+            background-color: $colorGray;
+            box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.3);
+            color: #333;
+            border-color: #333;
+        }
+    }
+}
+
+.comparison-table-actions {
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.comparison-table-save {
+    position: absolute;
+    left: 16px;
+    top: 6px;
+}
+
+.comparison-table-remove-property {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    @media #{$screenGtXS} {
+        right: 100%;
+        margin-right: 4px;
+    }
+}
+
+.comparison-table-remove-variant {
+    position: absolute;
+    bottom: 100%;
+    margin-bottom: 5px;
+    right: 16px;
+}

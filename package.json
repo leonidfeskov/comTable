@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^7.1.2",
     "classnames": "^2.2.6",
     "firebase": "^7.17.1",
+    "normalize-scss": "^7.0.1",
     "react": "^16.13.1",
     "react-contenteditable": "^3.3.5",
     "react-dom": "^16.13.1",
@@ -37,5 +38,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "node-sass": "^4.14.1"
   }
 }

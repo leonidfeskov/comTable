@@ -1,5 +1,7 @@
+@import '../../styles/_variables';
+
 .progress {
-    background-color: #ccc;
+    background-color: $colorGray;
     height: 20px;
     padding: 4px;
     border: 4px solid #333;
@@ -7,7 +9,7 @@
 }
 
 .progress__bar {
-    background-color: #ffc107;
+    background-color: $colorNormal;
     box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
     height: 100%;
     width: 0;
@@ -16,9 +18,9 @@
 }
 
 .progress__bar_worst {
-    background-color: #ff5722;
+    background-color: $colorBad;
 }
 
 .progress__bar_best {
-    background-color: #4caf50;
+    background-color: $colorGood;
 }

@@ -1,0 +1,14 @@
+@import '~normalize-scss/sass/normalize';
+@import './variables';
+
+@include normalize();
+
+html, body, #root {
+    height: 100%;
+}
+
+body {
+    background-color: $backgroundColor;
+    color: $fontColor;
+    font: 14px/1.5 source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
